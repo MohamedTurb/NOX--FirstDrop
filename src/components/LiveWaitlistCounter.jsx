@@ -25,12 +25,12 @@ export default function LiveWaitlistCounter({ collectionName = 'waitlist', class
   }, [collectionName]);
 
   return (
-    <div className={`${className} w-full flex items-center justify-center py-6 px-4`} aria-live="polite">
+    <div className={`${className} w-full flex items-center justify-center py-4 px-3 sm:py-6 sm:px-4`} aria-live="polite">
       <div className="text-center">
-        <div className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white">
+        <div className="text-[clamp(2.5rem,6vw,4.5rem)] sm:text-[clamp(3rem,6vw,5rem)] md:text-[clamp(3.5rem,6vw,6rem)] font-extrabold tracking-tight text-white">
           {count === null ? '—' : count}
         </div>
-        <div className="mt-1 text-sm uppercase tracking-widest text-white/60">people joined</div>
+        <div className="mt-1 text-xs sm:text-sm uppercase tracking-widest text-white/60">people joined</div>
       </div>
     </div>
   );

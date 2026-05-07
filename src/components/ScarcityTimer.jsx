@@ -35,9 +35,9 @@ export default function ScarcityTimer() {
   const s = secs % 60;
 
   return (
-    <div className="rounded px-3 py-2 bg-white/5 text-sm">
-      <div className="font-semibold">Waitlist closes in</div>
-      <div className="mt-1">{days}d {hours}h {mins}m {s}s</div>
+    <div className="rounded px-3 py-2 sm:px-4 sm:py-3 bg-white/5 text-sm sm:text-base">
+      <div className="font-semibold text-sm sm:text-base">Waitlist closes in</div>
+      <div className="mt-1 text-base sm:text-lg">{days}d {hours}h {mins}m {s}s</div>
     </div>
   );
 }
