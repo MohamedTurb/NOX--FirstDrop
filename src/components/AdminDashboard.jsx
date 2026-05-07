@@ -51,18 +51,22 @@ export default function AdminDashboard() {
   useEffect(() => {
     let unsubUsers = null;
     let unsubLeaders = null;
-    if (isAdmin) {
+    if (isAdmin || devMode) {
       unsubUsers = subscribeWaitlist((items, size) => {
+        console.log(`[Admin] Waitlist updated: ${size} items`);
         setUsers(items);
         setTotal(size);
       });
-      unsubLeaders = subscribeLeaderboard((items) => setLeaders(items), 50);
+      unsubLeaders = subscribeLeaderboard((items) => {
+        console.log(`[Admin] Leaders updated: ${items.length} leaders`);
+        setLeaders(items);
+      }, 50);
     }
     return () => {
       if (unsubUsers) unsubUsers();
       if (unsubLeaders) unsubLeaders();
     };
-  }, [isAdmin]);
+  }, [isAdmin, devMode]);
 
   const login = async () => {
     const provider = new GoogleAuthProvider();
@@ -170,12 +174,16 @@ export default function AdminDashboard() {
           <div className="rounded bg-white/5 p-4">
           <div className="text-sm text-white/60">Top Referrers</div>
           <div className="mt-2">
-            {leaders.map((l) => (
-              <div key={l.id} className="flex items-center justify-between py-1">
-                <div>{l.name || l.email || l.referralId}</div>
-                <div className="font-semibold">{l.invitesCount || 0}</div>
-              </div>
-            ))}
+            {leaders.length === 0 ? (
+              <div className="text-sm text-white/40">No referrers yet</div>
+            ) : (
+              leaders.map((l) => (
+                <div key={l.id} className="flex items-center justify-between py-1">
+                  <div>{l.name || l.email || l.referralId}</div>
+                  <div className="font-semibold">{l.invitesCount || 0}</div>
+                </div>
+              ))
+            )}
           </div>
         </div>
           <div className="rounded bg-white/5 p-4">
@@ -190,32 +198,39 @@ export default function AdminDashboard() {
       <div className="mt-6">
         <h3 className="text-base sm:text-lg font-semibold mb-2">Waitlist Users</h3>
         <div className="overflow-auto rounded bg-white/5">
-          <table className="w-full table-auto">
-            <thead>
-              <tr className="text-left text-sm text-white/60">
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Email</th>
-                <th className="px-4 py-2">Instagram</th>
-                <th className="px-4 py-2">Referral ID</th>
-                <th className="px-4 py-2">Referred By</th>
-                <th className="px-4 py-2">Invites</th>
-                <th className="px-4 py-2">Created</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u.id} className="border-t border-white/5 text-xs sm:text-sm">
-                  <td className="px-4 py-2">{u.name}</td>
-                  <td className="px-4 py-2">{u.email}</td>
-                  <td className="px-4 py-2">{u.instagram}</td>
-                  <td className="px-4 py-2">{u.referralId}</td>
-                  <td className="px-4 py-2">{u.referredBy}</td>
-                  <td className="px-4 py-2">{u.invitesCount || 0}</td>
-                  <td className="px-4 py-2">{u.createdAt?.toDate ? new Date(u.createdAt.toDate()).toLocaleString() : '-'}</td>
+          {users.length === 0 ? (
+            <div className="p-6 text-center text-white/50">
+              <p>No users in waitlist yet</p>
+              <p className="text-xs mt-2">Check Firestore security rules if data should exist</p>
+            </div>
+          ) : (
+            <table className="w-full table-auto">
+              <thead>
+                <tr className="text-left text-sm text-white/60">
+                  <th className="px-4 py-2">Name</th>
+                  <th className="px-4 py-2">Email</th>
+                  <th className="px-4 py-2">Instagram</th>
+                  <th className="px-4 py-2">Referral ID</th>
+                  <th className="px-4 py-2">Referred By</th>
+                  <th className="px-4 py-2">Invites</th>
+                  <th className="px-4 py-2">Created</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {users.map((u) => (
+                  <tr key={u.id} className="border-t border-white/5 text-xs sm:text-sm">
+                    <td className="px-4 py-2">{u.name}</td>
+                    <td className="px-4 py-2">{u.email}</td>
+                    <td className="px-4 py-2">{u.instagram}</td>
+                    <td className="px-4 py-2">{u.referralId}</td>
+                    <td className="px-4 py-2">{u.referredBy}</td>
+                    <td className="px-4 py-2">{u.invitesCount || 0}</td>
+                    <td className="px-4 py-2">{u.createdAt?.toDate ? new Date(u.createdAt.toDate()).toLocaleString() : '-'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>
