@@ -96,45 +96,53 @@ export default function AdminDashboard() {
   };
 
   const handleExport = async () => {
-    if (!isAdmin) return alert('Not authorized');
-    const csv = await exportWaitlistCSV();
-    if (!csv) {
-      alert('No data to export');
-      return;
+    if (!isAdmin && !devMode) return alert('Not authorized');
+    try {
+      const csv = await exportWaitlistCSV();
+      if (!csv) {
+        alert('No data to export');
+        return;
+      }
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'nox_waitlist.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      console.log('Export successful');
+    } catch (err) {
+      console.error('Export error:', err);
+      alert(`Export failed: ${err.message}`);
     }
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'nox_waitlist.csv';
-    a.click();
-    URL.revokeObjectURL(url);
   };
 
   const toggleSoldOut = async () => {
-    if (!isAdmin) return alert('Not authorized');
+    if (!isAdmin && !devMode) return alert('Not authorized');
     try {
       const fn = httpsCallable(functions, 'updateLaunchConfig');
       const res = await fn({ soldOut: true });
-      alert('Marked sold out');
+      alert('✅ Marked sold out');
+      console.log('toggleSoldOut response:', res);
     } catch (err) {
-      console.error(err);
-      alert('Failed to update');
+      console.error('toggleSoldOut error:', err);
+      alert(`❌ Failed: ${err.message || err.code}`);
     }
   };
 
   const setVipWindow = async () => {
-    if (!isAdmin) return alert('Not authorized');
+    if (!isAdmin && !devMode) return alert('Not authorized');
     const hours = prompt('VIP window hours (e.g. 48)');
     const n = parseInt(hours || '0');
-    if (isNaN(n) || n <= 0) return;
+    if (isNaN(n) || n <= 0) return alert('Invalid hours');
     try {
       const fn = httpsCallable(functions, 'updateLaunchConfig');
-      await fn({ vipWindowHours: n });
-      alert('VIP window set');
+      const res = await fn({ vipWindowHours: n });
+      alert(`✅ VIP window set to ${n}h`);
+      console.log('setVipWindow response:', res);
     } catch (err) {
-      console.error(err);
-      alert('Failed to update');
+      console.error('setVipWindow error:', err);
+      alert(`❌ Failed: ${err.message || err.code}`);
     }
   };
 
