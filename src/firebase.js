@@ -1,0 +1,15 @@
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD3lQ0ns-Jy0TSVTHIMUYmfAh1axByNVfE",
+  authDomain: "nox-streetwear.firebaseapp.com",
+  projectId: "nox-streetwear",
+  storageBucket: "nox-streetwear.firebasestorage.app",
+  messagingSenderId: "37310508365",
+  appId: "1:37310508365:web:e03b2ac0e6ad435f1c5b04",
+  measurementId: "G-HX7P5QT0VG"
+};
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
