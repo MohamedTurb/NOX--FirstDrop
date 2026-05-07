@@ -103,8 +103,8 @@ export default function AdminDashboard() {
 
   if (!user || !isAdmin) {
     return (
-      <div className="mx-auto max-w-4xl p-6">
-        <h2 className="text-2xl font-semibold mb-4">Admin Login</h2>
+      <div className="mx-auto max-w-4xl p-4 sm:p-6">
+        <h2 className="text-xl sm:text-2xl font-semibold mb-4">Admin Login</h2>
         <div className="flex gap-2">
           <button onClick={login} className="rounded bg-white px-4 py-2 font-semibold">Sign in with Google</button>
         </div>
@@ -114,21 +114,21 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl p-6">
+    <div className="mx-auto max-w-6xl p-4 sm:p-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold">NOX Admin Dashboard</h2>
+        <h2 className="text-xl sm:text-2xl font-semibold">NOX Admin Dashboard</h2>
         <div className="flex gap-2">
           <button onClick={handleExport} className="rounded bg-white px-4 py-2 font-semibold text-black">Export CSV</button>
           <button onClick={() => signOut(auth)} className="rounded bg-white/5 px-4 py-2">Sign out</button>
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-3 gap-4">
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded bg-white/5 p-4">
           <div className="text-sm text-white/60">Total Waitlist</div>
           <div className="mt-2 text-3xl font-bold">{total}</div>
         </div>
-        <div className="rounded bg-white/5 p-4">
+          <div className="rounded bg-white/5 p-4">
           <div className="text-sm text-white/60">Top Referrers</div>
           <div className="mt-2">
             {leaders.map((l) => (
@@ -139,17 +139,17 @@ export default function AdminDashboard() {
             ))}
           </div>
         </div>
-        <div className="rounded bg-white/5 p-4">
+          <div className="rounded bg-white/5 p-4">
           <div className="text-sm text-white/60">Quick Actions</div>
           <div className="mt-2 flex flex-col gap-2">
-            <button onClick={toggleSoldOut} className="rounded bg-white/5 px-3 py-2">Mark Sold Out</button>
-            <button onClick={setVipWindow} className="rounded bg-white/5 px-3 py-2">Set VIP window</button>
+            <button onClick={toggleSoldOut} className="rounded bg-white/5 px-3 py-2 text-sm sm:text-base">Mark Sold Out</button>
+            <button onClick={setVipWindow} className="rounded bg-white/5 px-3 py-2 text-sm sm:text-base">Set VIP window</button>
           </div>
         </div>
       </div>
 
       <div className="mt-6">
-        <h3 className="text-lg font-semibold mb-2">Waitlist Users</h3>
+        <h3 className="text-base sm:text-lg font-semibold mb-2">Waitlist Users</h3>
         <div className="overflow-auto rounded bg-white/5">
           <table className="w-full table-auto">
             <thead>
@@ -165,7 +165,7 @@ export default function AdminDashboard() {
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u.id} className="border-t border-white/5 text-sm">
+                <tr key={u.id} className="border-t border-white/5 text-xs sm:text-sm">
                   <td className="px-4 py-2">{u.name}</td>
                   <td className="px-4 py-2">{u.email}</td>
                   <td className="px-4 py-2">{u.instagram}</td>

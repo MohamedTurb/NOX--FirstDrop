@@ -162,7 +162,7 @@ export default function NOXLandingPage() {
               <p className="mb-5 text-xs font-semibold uppercase tracking-[0.45em] text-white/50">
                 First clothing drop / Vol. 01
               </p>
-              <h1 className="max-w-4xl text-5xl font-semibold leading-[0.92] tracking-[-0.06em] text-white sm:text-6xl md:text-7xl lg:text-[5.8rem]">
+              <h1 className="max-w-4xl text-[clamp(2rem,6vw,3.6rem)] sm:text-[clamp(2.5rem,6vw,4.5rem)] md:text-[clamp(3rem,6vw,5.8rem)] font-semibold leading-[0.92] tracking-[-0.06em] text-white">
                 Night-built streetwear for people who move like a secret.
               </h1>
               <p className="mt-6 max-w-xl text-base leading-7 text-white/65 sm:text-lg">
@@ -173,7 +173,7 @@ export default function NOXLandingPage() {
               <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
                 <a
                   href="#waitlist"
-                  className="inline-flex items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.28em] text-black transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_18px_60px_rgba(255,255,255,0.18)]"
+                  className="inline-flex items-center justify-center rounded-full bg-white px-4 py-3 sm:px-6 sm:py-4 text-sm font-semibold uppercase tracking-[0.28em] text-black transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_18px_60px_rgba(255,255,255,0.18)]"
                 >
                   Get early access
                 </a>
@@ -183,7 +183,7 @@ export default function NOXLandingPage() {
               </div>
 
               <div className="mt-10 grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3 items-stretch">
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-0 backdrop-blur-xl flex items-center justify-center">
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-0 backdrop-blur-xl flex items-center justify-center min-h-[120px] sm:min-h-[160px]">
                   <LiveWaitlistCounter collectionName="waitlist" />
                 </div>
 
@@ -208,7 +208,7 @@ export default function NOXLandingPage() {
                     key={stat.label}
                     className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-xl"
                   >
-                    <div className="text-2xl font-semibold tracking-[-0.04em] text-white">
+                    <div className="text-xl sm:text-2xl font-semibold tracking-[-0.04em] text-white">
                       {stat.value}
                     </div>
                     <div className="mt-1 text-xs uppercase tracking-[0.28em] text-white/45">
@@ -341,9 +341,9 @@ export default function NOXLandingPage() {
                 />
               </label>
 
-              <button
+                <button
                 type="submit"
-                className="mt-2 inline-flex items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.28em] text-black transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_18px_60px_rgba(255,255,255,0.18)]"
+                className="mt-2 inline-flex items-center justify-center rounded-full bg-white px-4 py-3 sm:px-6 sm:py-4 text-sm font-semibold uppercase tracking-[0.28em] text-black transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_18px_60px_rgba(255,255,255,0.18)]"
               >
                 Join the waitlist
               </button>
