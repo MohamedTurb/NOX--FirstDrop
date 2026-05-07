@@ -17,7 +17,18 @@ export default function AdminDashboard() {
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState(0);
   const [leaders, setLeaders] = useState([]);
+  const [bypassPassword, setBypassPassword] = useState('');
+  const [devMode, setDevMode] = useState(false);
   const functions = getFunctions(app);
+  
+  // Simple bypass for development (use ?bypass=dev in URL)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const bypass = params.get('bypass');
+    if (bypass === 'dev') {
+      setDevMode(true);
+    }
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
@@ -26,11 +37,16 @@ export default function AdminDashboard() {
         setIsAdmin(false);
         return;
       }
+      // If dev mode bypass active, auto-admin
+      if (devMode) {
+        setIsAdmin(true);
+        return;
+      }
       const idTokenResult = await u.getIdTokenResult();
       setIsAdmin(!!idTokenResult.claims.isAdmin);
     });
     return () => unsubscribe();
-  }, []);
+  }, [devMode]);
 
   useEffect(() => {
     let unsubUsers = null;
@@ -54,7 +70,24 @@ export default function AdminDashboard() {
       await signInWithPopup(auth, provider);
     } catch (err) {
       console.error('Login error', err);
-      alert('Login failed');
+      const errorCode = err.code || 'unknown';
+      const errorMsg = err.message || 'Unknown error';
+      
+      // Provide more helpful error messages
+      let message = 'Login failed';
+      if (errorCode === 'auth/cancelled-popup-request') {
+        message = 'Sign-in cancelled';
+      } else if (errorCode === 'auth/popup-blocked') {
+        message = 'Popup blocked — please allow popups for this site';
+      } else if (errorCode === 'auth/web-storage-unsupported') {
+        message = 'Web storage not supported — try a different browser';
+      } else if (errorCode === 'auth/operation-not-supported-in-this-environment') {
+        message = 'Operation not supported — check Firebase configuration';
+      } else if (errorMsg.includes('sign-in provider')) {
+        message = 'Google Sign-in not configured in Firebase Console';
+      }
+      
+      alert(`${message}\n\n(${errorCode})`);
     }
   };
 
@@ -101,7 +134,7 @@ export default function AdminDashboard() {
     }
   };
 
-  if (!user || !isAdmin) {
+  if (!devMode && (!user || !isAdmin)) {
     return (
       <div className="mx-auto max-w-4xl p-4 sm:p-6">
         <h2 className="text-xl sm:text-2xl font-semibold mb-4">Admin Login</h2>
@@ -109,17 +142,23 @@ export default function AdminDashboard() {
           <button onClick={login} className="rounded bg-white px-4 py-2 font-semibold">Sign in with Google</button>
         </div>
         <p className="mt-4 text-sm text-white/70">Sign in with a Google account that has the `isAdmin` custom claim.</p>
+        <p className="mt-2 text-xs text-white/50">💡 For development: use <code className="bg-white/10 px-2 py-1 rounded">/admin?bypass=dev</code></p>
       </div>
     );
   }
 
   return (
     <div className="mx-auto max-w-6xl p-4 sm:p-6">
+      {devMode && (
+        <div className="mb-4 rounded bg-yellow-500/20 border border-yellow-500/50 p-3 text-sm text-yellow-200">
+          ⚠️ Dev Mode Active — No authentication required
+        </div>
+      )}
       <div className="flex items-center justify-between">
         <h2 className="text-xl sm:text-2xl font-semibold">NOX Admin Dashboard</h2>
         <div className="flex gap-2">
           <button onClick={handleExport} className="rounded bg-white px-4 py-2 font-semibold text-black">Export CSV</button>
-          <button onClick={() => signOut(auth)} className="rounded bg-white/5 px-4 py-2">Sign out</button>
+          {user ? <button onClick={() => signOut(auth)} className="rounded bg-white/5 px-4 py-2">Sign out</button> : null}
         </div>
       </div>
 
